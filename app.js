@@ -24,6 +24,10 @@ const userLoginSpan = document.getElementById("userLogin");
 const loginTimeSpan = document.getElementById("loginTime");
 const logoutBtn = document.getElementById("logoutBtn");
 
+const registerScreen = document.getElementById("registerScreen");
+const registerForm = document.getElementById("registerForm");
+const registerLoginInput = document.getElementById("registerLogin");
+const registerPasswordInput = document.getElementById("registerPassword");
 // ==============================
 // Локальне "збереження сесії"
 // ==============================
@@ -69,6 +73,13 @@ function showAppScreen(session) {
 
   userLoginSpan.textContent = session.login;
   loginTimeSpan.textContent = new Date(session.loginTime).toLocaleString();
+}
+
+//перемикання на екран реєстрації
+function showRegisterScreen() {
+  loginScreen.classList.add("hidden");
+  appScreen.classList.add("hidden");
+  registerScreen.classList.remove("hidden");
 }
 
 // ==============================
@@ -149,6 +160,26 @@ async function registerUser(login, password) {
 
 logoutBtn.addEventListener("click", () => {
   clearSession();
+  showLoginScreen();
+});
+
+// ==============================
+// Обробка реєстрації  (пункт 3)
+// ==============================
+registerForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const login = registerLoginInput.value.trim();
+  const password = registerPasswordInput.value;
+
+  if (!login || !password) {
+    alert("Будь ласка, заповніть логін і пароль.");
+    return;
+  }
+
+  await registerUser(login, password);
+
+  // після успішної реєстрації повертаємо на логін
   showLoginScreen();
 });
 
