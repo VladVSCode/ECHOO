@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # ====== ТЕСТОВИЙ КОРИСТУВАЧ ======
 USERS = {
