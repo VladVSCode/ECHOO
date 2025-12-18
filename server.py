@@ -77,3 +77,22 @@ def login():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
+# ====== Реєстрація ======
+
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+    login = data.get("login", "")
+    password = data.get("password", "")
+
+    if not login or not password:
+        return jsonify({"error": "Логін і пароль обов’язкові"}), 400
+
+    if login in USERS:
+        return jsonify({"error": "Користувач вже існує"}), 409
+
+    USERS[login] = {
+        "password_hash": generate_password_hash(password)
+    }
+    return jsonify({"message": "Реєстрація успішна", "login": login}), 201

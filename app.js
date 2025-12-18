@@ -119,6 +119,31 @@ loginForm.addEventListener("submit", async (event) => {
 });
 
 // ==============================
+// Реєстрація
+// ==============================
+
+const REGISTER_URL = `${API_BASE}/register`;
+
+async function registerUser(login, password) {
+  try {
+    const response = await fetch(REGISTER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ login, password })
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert("Реєстрація успішна! Тепер увійдіть.");
+    } else {
+      alert(data.error || "Помилка реєстрації.");
+    }
+  } catch (err) {
+    alert("Помилка з’єднання з сервером.");
+  }
+}
+
+
+// ==============================
 // Логаут
 // ==============================
 
