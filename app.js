@@ -3,7 +3,7 @@
 // ==============================
 
 // TODO: зміни на IP свого ПК з Flask-сервером
-// Наприклад: const API_BASE = "http://192.168.0.101:5000";
+// Наприклад: const API_BASE = "http://192.168.0.109:5000";
 const API_BASE = "http://192.168.0.109:5000";
 
 const LOGIN_URL = `${API_BASE}/login`;
