@@ -70,6 +70,7 @@ function clearSession() {
     loginScreen.classList.remove("hidden");
     registerScreen.classList.add("hidden");
     appScreen.classList.add("hidden");
+    helpScreen.classList.add("hidden");
     loginResult.textContent = "";
   }
   // ==============================
