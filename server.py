@@ -75,9 +75,6 @@ def login():
     reset_attempts(rec)
     return jsonify({"message": "success", "login": login}), 200
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
-
 # ====== Реєстрація ======
 
 @app.route("/register", methods=["POST"])
@@ -96,3 +93,6 @@ def register():
         "password_hash": generate_password_hash(password)
     }
     return jsonify({"message": "Реєстрація успішна", "login": login}), 201
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
