@@ -65,12 +65,14 @@ function clearSession() {
 function showLoginScreen() {
   loginScreen.classList.remove("hidden");
   appScreen.classList.add("hidden");
+  registerScreen.classList.add("hidden");
   loginResult.textContent = "";
 }
 
 function showAppScreen(session) {
   loginScreen.classList.add("hidden");
   appScreen.classList.remove("hidden");
+  registerScreen.classList.add("hidden");
 
   userLoginSpan.textContent = session.login;
   loginTimeSpan.textContent = new Date(session.loginTime).toLocaleString();
