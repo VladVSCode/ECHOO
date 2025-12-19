@@ -8,6 +8,7 @@ const API_BASE = "http://192.168.0.106:5000";
 
 const LOGIN_URL = `${API_BASE}/login`;
 const REGISTER_URL = `${API_BASE}/register`;
+const HELP_URL = `${API_BASE}/help`;
 
 // ==============================
 // DOM-елементи
@@ -29,6 +30,8 @@ const registerScreen = document.getElementById("registerScreen");
 const registerForm = document.getElementById("registerForm");
 const registerLoginInput = document.getElementById("registerLogin");
 const registerPasswordInput = document.getElementById("registerPassword");
+
+const helpScreen = document.getElementById("helpScreen");
 // ==============================
 // Локальне "збереження сесії"
 // ==============================
@@ -97,7 +100,6 @@ function clearSession() {
   // ==============================
   // Показати екран допомоги
   // ==============================
-  const helpScreen = document.getElementById("helpScreen");
 
   function showHelpScreen() {
     window.location.hash = "#help";
