@@ -7,6 +7,7 @@
 const API_BASE = "http://192.168.0.106:5000";
 
 const LOGIN_URL = `${API_BASE}/login`;
+const REGISTER_URL = `${API_BASE}/register`;
 
 // ==============================
 // DOM-елементи
@@ -133,7 +134,6 @@ loginForm.addEventListener("submit", async (event) => {
 // Реєстрація
 // ==============================
 
-const REGISTER_URL = `${API_BASE}/register`;
 
 async function registerUser(login, password) {
   try {
