@@ -80,6 +80,7 @@ function clearSession() {
     window.location.hash = "#register";
     loginScreen.classList.add("hidden");
     registerScreen.classList.remove("hidden");
+    helpScreen.classList.add("hidden");
     appScreen.classList.add("hidden");
   }
   // ==============================
