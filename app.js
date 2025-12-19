@@ -94,6 +94,7 @@ function clearSession() {
     loginScreen.classList.add("hidden");
     registerScreen.classList.add("hidden");
     appScreen.classList.remove("hidden");
+    helpScreen.classList.add("hidden");
     userLoginSpan.textContent = session.login;
     loginTimeSpan.textContent = new Date(session.loginTime).toLocaleString();
   }
