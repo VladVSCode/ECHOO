@@ -62,30 +62,49 @@ function clearSession() {
 // UI: перемикання екранiв
 // ==============================
 
+  // ==============================
+  // Показати екран логіну
+  // ==============================
+  function showLoginScreen() {
+    window.location.hash = "#login";
+    loginScreen.classList.remove("hidden");
+    registerScreen.classList.add("hidden");
+    appScreen.classList.add("hidden");
+    loginResult.textContent = "";
+  }
+  // ==============================
+  // Показати екран реєстрації
+  // ==============================
+  function showRegisterScreen() {
+    window.location.hash = "#register";
+    loginScreen.classList.add("hidden");
+    registerScreen.classList.remove("hidden");
+    appScreen.classList.add("hidden");
+  }
+  // ==============================
+  // Показати основний екран додатку
+  // ==============================
+  function showAppScreen(session) {
+    window.location.hash = "#app";
+    loginScreen.classList.add("hidden");
+    registerScreen.classList.add("hidden");
+    appScreen.classList.remove("hidden");
+    userLoginSpan.textContent = session.login;
+    loginTimeSpan.textContent = new Date(session.loginTime).toLocaleString();
+  }
+  // ==============================
+  // Показати екран допомоги
+  // ==============================
+  const helpScreen = document.getElementById("helpScreen");
 
-function showLoginScreen() {
-  window.location.hash = "#login";
-  loginScreen.classList.remove("hidden");
-  registerScreen.classList.add("hidden");
-  appScreen.classList.add("hidden");
-  loginResult.textContent = "";
-}
+  function showHelpScreen() {
+    window.location.hash = "#help";
+    loginScreen.classList.add("hidden");
+    registerScreen.classList.add("hidden");
+    appScreen.classList.add("hidden");
+    helpScreen.classList.remove("hidden");
+  }
 
-function showRegisterScreen() {
-  window.location.hash = "#register";
-  loginScreen.classList.add("hidden");
-  registerScreen.classList.remove("hidden");
-  appScreen.classList.add("hidden");
-}
-
-function showAppScreen(session) {
-  window.location.hash = "#app";
-  loginScreen.classList.add("hidden");
-  registerScreen.classList.add("hidden");
-  appScreen.classList.remove("hidden");
-  userLoginSpan.textContent = session.login;
-  loginTimeSpan.textContent = new Date(session.loginTime).toLocaleString();
-}
 
 
 // ==============================
