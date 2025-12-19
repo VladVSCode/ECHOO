@@ -62,28 +62,31 @@ function clearSession() {
 // UI: перемикання екранiв
 // ==============================
 
+
 function showLoginScreen() {
+  window.location.hash = "#login";
   loginScreen.classList.remove("hidden");
-  appScreen.classList.add("hidden");
   registerScreen.classList.add("hidden");
+  appScreen.classList.add("hidden");
   loginResult.textContent = "";
 }
 
-function showAppScreen(session) {
+function showRegisterScreen() {
+  window.location.hash = "#register";
   loginScreen.classList.add("hidden");
-  appScreen.classList.remove("hidden");
-  registerScreen.classList.add("hidden");
+  registerScreen.classList.remove("hidden");
+  appScreen.classList.add("hidden");
+}
 
+function showAppScreen(session) {
+  window.location.hash = "#app";
+  loginScreen.classList.add("hidden");
+  registerScreen.classList.add("hidden");
+  appScreen.classList.remove("hidden");
   userLoginSpan.textContent = session.login;
   loginTimeSpan.textContent = new Date(session.loginTime).toLocaleString();
 }
 
-//перемикання на екран реєстрації
-function showRegisterScreen() {
-  loginScreen.classList.add("hidden");
-  appScreen.classList.add("hidden");
-  registerScreen.classList.remove("hidden");
-}
 
 // ==============================
 // Обробка логіну
@@ -166,7 +169,7 @@ logoutBtn.addEventListener("click", () => {
 });
 
 // ==============================
-// Обробка реєстрації  (пункт 3)
+// Обробка реєстрації
 // ==============================
 registerForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -197,3 +200,17 @@ document.addEventListener("DOMContentLoaded", () => {
     showLoginScreen();
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const session = loadSession();
+  if (session) {
+    showAppScreen(session);
+  } else {
+    if (window.location.hash === "#register") {
+      showRegisterScreen();
+    } else {
+      showLoginScreen();
+    }
+  }
+});
+
