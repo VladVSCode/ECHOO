@@ -31,7 +31,7 @@ def add_user(email, password_hash):
     conn.close()
 
 def get_user(email):
-    conn = sqlite3.connect("echoo.db")
+    conn = sqlite3.connect("acaunts, metadata.db")
     c = conn.cursor()
     c.execute("SELECT password_hash FROM users WHERE email = ?", (email,))
     row = c.fetchone()
