@@ -125,6 +125,22 @@
     p, li {
       color: #f5eaff;
     }
+    .grid-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .profile-box {
+      background: rgba(255,255,255,0.15);
+      padding: 16px;
+      border-radius: 12px;
+      color: white;
+      text-align: left;
+      box-shadow: 4px 4px 12px rgba(0,0,0,0.2);
+    }
+
   </style>
 
   <script defer src="app.js"></script>
@@ -206,30 +222,30 @@
   <!-- Екран після входу -->
   <div id="appScreen" class="app-container hidden">
     <div class="text-center mb-3">
-      <img src="echoo.png" alt="Echoo" class="app-logo">
-      <div class="brand-title">Echoo</div>
-      <div class="brand-subtitle">Ви успішно увійшли</div>
-    </div>
+  <img src="echoo.png" alt="Echoo" class="app-logo">
+  <div class="brand-title">Echoo</div>
+  <div class="brand-subtitle">Ви успішно увійшли</div>
+</div>
 
-    <h5>Профіль</h5>
-    <p><strong>Логін:</strong> <span id="userLogin"></span></p>
-    <p><strong>Час входу:</strong> <span id="loginTime"></span></p>
+<div class="profile-box mb-3">
+  <p><strong>Логін:</strong> <span id="userLogin"></span></p>
+  <p><strong>Час входу:</strong> <span id="loginTime"></span></p>
+  <p><strong>Стан безпеки:</strong> Захищено — увімкнено rate-limiting і блокування акаунта</p>
+</div>
 
-    <h5>Стан безпеки</h5>
-    <p id="securityInfo" class="status-ok">
-      Захищено: увімкнено rate-limiting і тимчасове блокування акаунта.
-    </p>
+<div class="grid-buttons">
+  <button class="neobutton" disabled>📁 Мої файли</button>
+  <button class="neobutton" disabled>💬 Чати</button>
+  <button class="neobutton" disabled>⚙️ Налаштування</button>
+  <button class="neobutton" disabled>🔔 Сповіщення</button>
+  <button class="neobutton" disabled>📞 Дзвінки</button>
+  <button class="neobutton" disabled>📤 Надіслати файл</button>
+</div>
 
-    <h5>Демонстраційні дані</h5>
-    <ul>
-      <li>Приватні чати</li>
-      <li>Налаштування профілю</li>
-      <li>Майбутні функції: дзвінки, файли, push-повідомлення</li>
-    </ul>
+<div class="text-center mt-4">
+  <button id="logoutBtn" class="neobutton">🔒 Вийти</button>
+</div>
 
-    <button id="logoutBtn" class="neobutton w-100 mt-3" style="background: #ffffff22; color:white;">
-      Вийти
-    </button>
   </div>
 
 </body>
