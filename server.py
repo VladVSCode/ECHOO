@@ -12,7 +12,7 @@ CORS(app, supports_credentials=True)
 # Ініціалізація бази даних
 # -----------------------------
 def init_db():
-    conn = sqlite3.connect("echoo.db")
+    conn = sqlite3.connect("acaunts, metadata.db")
     c = conn.cursor()
     c.execute("""
         CREATE TABLE IF NOT EXISTS users (
