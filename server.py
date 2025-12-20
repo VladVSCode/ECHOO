@@ -24,7 +24,7 @@ def init_db():
     conn.close()
 
 def add_user(email, password_hash):
-    conn = sqlite3.connect("echoo.db")
+    conn = sqlite3.connect("acaunts, metadata.db")
     c = conn.cursor()
     c.execute("INSERT INTO users (email, password_hash) VALUES (?, ?)", (email, password_hash))
     conn.commit()
