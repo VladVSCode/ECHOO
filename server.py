@@ -1,34 +1,57 @@
+
+import sqlite3
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
-# ====== ТЕСТОВИЙ КОРИСТУВАЧ ======
-USERS = {
-    "test": {
-        "password_hash": generate_password_hash("123456")
-    }
-}
+# -----------------------------
+# Ініціалізація бази даних
+# -----------------------------
+def init_db():
+    conn = sqlite3.connect("echoo.db")
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            email TEXT PRIMARY KEY,
+            password_hash TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
 
-# ====== RATE LIMIT / БЛОКУВАННЯ ======
+def add_user(email, password_hash):
+    conn = sqlite3.connect("echoo.db")
+    c = conn.cursor()
+    c.execute("INSERT INTO users (email, password_hash) VALUES (?, ?)", (email, password_hash))
+    conn.commit()
+    conn.close()
+
+def get_user(email):
+    conn = sqlite3.connect("echoo.db")
+    c = conn.cursor()
+    c.execute("SELECT password_hash FROM users WHERE email = ?", (email,))
+    row = c.fetchone()
+    conn.close()
+    return row[0] if row else None
+
+# -----------------------------
+# Захист від brute-force
+# -----------------------------
 ATTEMPTS = {}
 MAX_ATTEMPTS = 5
-WINDOW_SECONDS = 900   # 15 хв
-LOCK_SECONDS = 600     # 10 хв
+WINDOW_SECONDS = 900   # 15 хвилин
+LOCK_SECONDS = 600     # 10 хвилин
 
 def now():
     return datetime.utcnow()
 
 def get_attempt(login):
     if login not in ATTEMPTS:
-        ATTEMPTS[login] = {
-            "attempts": 0,
-            "first_attempt": None,
-            "lock_until": None
-        }
+        ATTEMPTS[login] = {"attempts": 0, "first_attempt": None, "lock_until": None}
     return ATTEMPTS[login]
 
 def is_locked(rec):
@@ -46,53 +69,48 @@ def register_fail(rec):
         rec["first_attempt"] = t
     else:
         rec["attempts"] += 1
-
     if rec["attempts"] >= MAX_ATTEMPTS:
         rec["lock_until"] = t + timedelta(seconds=LOCK_SECONDS)
+
+# -----------------------------
+# Маршрути
+# -----------------------------
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+    email = data.get("login", "").strip().lower()
+    password = data.get("password", "")
+
+    if not email or not password or "@" not in email:
+        return jsonify({"error": "Вкажіть валідний email і пароль"}), 400
+
+    if get_user(email):
+        return jsonify({"error": "Користувач вже існує"}), 409
+
+    add_user(email, generate_password_hash(password))
+    return jsonify({"message": "Реєстрація успішна", "login": email}), 201
 
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
-    login = data.get("login", "")
+    email = data.get("login", "").strip().lower()
     password = data.get("password", "")
 
-    rec = get_attempt(login)
-
-    # Перевірка блокування
+    rec = get_attempt(email)
     if is_locked(rec):
         return jsonify({"error": "Акаунт тимчасово заблоковано"}), 429
 
-    user = USERS.get(login)
-    if not user:
+    user_hash = get_user(email)
+    if not user_hash or not check_password_hash(user_hash, password):
         register_fail(rec)
         return jsonify({"error": "Невірні облікові дані"}), 401
 
-    if not check_password_hash(user["password_hash"], password):
-        register_fail(rec)
-        return jsonify({"error": "Невірні облікові дані"}), 401
-
-    # Успішний вхід
     reset_attempts(rec)
-    return jsonify({"message": "success", "login": login}), 200
+    return jsonify({"message": "success", "login": email}), 200
 
-# ====== Реєстрація ======
-
-@app.route("/register", methods=["POST"])
-def register():
-    data = request.get_json()
-    login = data.get("login", "")
-    password = data.get("password", "")
-
-    if not login or not password:
-        return jsonify({"error": "Логін і пароль обов’язкові"}), 400
-
-    if login in USERS:
-        return jsonify({"error": "Користувач вже існує"}), 409
-
-    USERS[login] = {
-        "password_hash": generate_password_hash(password)
-    }
-    return jsonify({"message": "Реєстрація успішна", "login": login}), 201
-
+# -----------------------------
+# Запуск сервера
+# -----------------------------
 if __name__ == "__main__":
+    init_db()
     app.run(host="0.0.0.0", port=5000)
